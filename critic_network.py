@@ -25,7 +25,7 @@ class CriticNetwork:
 
       # action gradient to be used in actor network:
       self.action_grad = tf.gradients(self.q_output, self.action_input)
-      self.action_grad = [self.action_grad[0] / config.MINI_BATCH_SIZE]
+      self.action_grad = self.action_grad[0] / config.MINI_BATCH_SIZE
 
       self.sess.run(tf.initialize_all_variables())
       self.saver = tf.train.Saver()
@@ -66,7 +66,7 @@ class CriticNetwork:
     b3 = self.random_uniform_variable([action_size], 0.0003)
 
     hidden1 = tf.nn.relu(tf.matmul(state_input, w1) + b1)
-    hidden2 = tf.nn.relu(tf.matmul(hidden1, w2_q) + tf.matmul(state_input, w2_action) + b2)
+    hidden2 = tf.nn.relu(tf.matmul(hidden1, w2_q) + tf.matmul(action_input, w2_action) + b2)
     output = tf.matmul(hidden2, w3) + b3
 
     return w1, b1, w2_q, w2_action, b2, w3, b3, state_input, action_input, output
@@ -94,7 +94,7 @@ class CriticNetwork:
       self.t_w1.assign((1 - config.TAO) * self.t_w1 + config.TAO * self.w1),
       self.t_b1.assign((1 - config.TAO) * self.t_b1 + config.TAO * self.b1),
       self.t_w2_q.assign((1 - config.TAO) * self.t_w2_q + config.TAO * self.w2_q),
-      self.t_w2_q.assign((1 - config.TAO) * self.t_w2_action + config.TAO * self.w2_action),
+      self.t_w2_action.assign((1 - config.TAO) * self.t_w2_action + config.TAO * self.w2_action),
       self.t_b2.assign((1 - config.TAO) * self.t_b2 + config.TAO * self.b2),
       self.t_w3.assign((1 - config.TAO) * self.t_w3 + config.TAO * self.w3),
       self.t_b3.assign((1 - config.TAO) * self.t_b3 + config.TAO * self.b3),

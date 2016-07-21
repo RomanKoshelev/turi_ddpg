@@ -8,11 +8,11 @@ def main():
   experiment = 'Pendulum-v0'
   env = gym.make(experiment)
   print(env.action_space)
-  action_size = env.action_space.n
+  action_size = env.action_space.shape[0]
   print(env.observation_space)
-  state_size = env.observation_space.n
+  state_size = env.observation_space.shape[0]
 
-  agent = AgentDDPG(env)
+  agent = AgentDDPG(env, state_size, action_size)
 
   for i in xrange(config.EPISODES):
     obs = env.reset()

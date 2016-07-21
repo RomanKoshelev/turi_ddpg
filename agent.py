@@ -80,7 +80,7 @@ class AgentDDPG:
 
     # Update the actor policy using the sampled gradient:
     action_batch = self.actor_network.get_action_batch(state_batch)
-    q_gradient_batch = self.critic_network.get_gradients(state_batch, action_batch) / config.MINI_BATCH_SIZE
+    q_gradient_batch = self.critic_network.get_gradients(state_batch, action_batch)
 
     self.actor_network.train(q_gradient_batch, state_batch)
 
